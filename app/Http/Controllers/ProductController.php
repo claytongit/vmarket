@@ -10,7 +10,9 @@ use Yajra\DataTables\Facades\DataTables;
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the product resources.
+     * Retrieves all suppliers to be used in the product listing view.
+     * @return \Illuminate\Contracts\View\View Returns the 'product.index' view with the list of suppliers.
      */
     public function index()
     {
@@ -19,7 +21,9 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new product resource.
+     * This method currently does not have any specific logic.
+     * @return void
      */
     public function create()
     {
@@ -27,7 +31,13 @@ class ProductController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created product resource in storage.
+     * Validates the incoming request data, creates a new Product model instance,
+     * populates it with the request data, saves it to the database, and then
+     * syncs the selected suppliers with the product. Returns a JSON response
+     * indicating the success or failure of the operation.
+     * @param  \Illuminate\Http\Request  $request The incoming HTTP request containing product data.
+     * @return \Illuminate\Http\JsonResponse Returns a JSON response with the status and a message.
      */
     public function storeProduct(Request $request)
     {
@@ -61,7 +71,11 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display a listing of the product resources for DataTables.
+     * Handles AJAX requests to fetch product data with associated suppliers,
+     * formats the data for Yajra DataTables, and adds action and checkbox columns.
+     * @param  \Illuminate\Http\Request  $request The incoming HTTP request.
+     * @return \Yajra\DataTables\Facades\DataTables Returns a DataTables response with product data.
      */
     public function getProducts(Request $request)
     {
@@ -91,7 +105,11 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified product resource.
+     * Retrieves a specific product resource based on the provided ID.
+     * Returns the product data as a JSON response.
+     * @param  \Illuminate\Http\Request  $request The incoming HTTP request containing the product ID.
+     * @return \Illuminate\Http\JsonResponse Returns a JSON response with the product data.
      */
     public function getProduct(Request $request)
     {
@@ -102,7 +120,12 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified product resource in storage.
+     * Validates the incoming request data, finds the existing Product model instance,
+     * updates it with the request data, and saves the changes to the database.
+     * Returns a JSON response indicating the success or failure of the update.
+     * @param  \Illuminate\Http\Request  $request The incoming HTTP request containing updated product data.
+     * @return \Illuminate\Http\JsonResponse Returns a JSON response with the status and a message.
      */
     public function updateProduct(Request $request)
     {
@@ -135,7 +158,11 @@ class ProductController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified product resource from storage.
+     * Finds and deletes a specific product resource based on the provided ID.
+     * Returns a JSON response indicating the success or failure of the deletion.
+     * @param  \Illuminate\Http\Request  $request The incoming HTTP request containing the product ID to delete.
+     * @return \Illuminate\Http\JsonResponse Returns a JSON response with the status and a message.
      */
     public function deleteProduct(Request $request)
     {
@@ -148,6 +175,13 @@ class ProductController extends Controller
         }
     }
 
+    /**
+     * Remove multiple product resources from storage.
+     * Receives an array of product IDs to be deleted and removes them from the database.
+     * Returns a JSON response indicating the success or failure of the bulk deletion.
+     * @param  \Illuminate\Http\Request  $request The incoming HTTP request containing an array of product IDs to delete.
+     * @return \Illuminate\Http\JsonResponse Returns a JSON response with the status and a message.
+     */
     public function deleteMultipleProduct(Request $request)
     {
         $ids = $request->checked_ids;

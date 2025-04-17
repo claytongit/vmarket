@@ -48,7 +48,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="cep">CEP</label>
-                                <input type="text" id="cep" name="cep" class="form-control" placeholder="Digite o endereço">
+                                <input type="text" id="cep" name="cep" class="form-control" placeholder="Digite o CEP">
                                 <span class="text-danger error-text cep_error"></span>
                             </div>
                             <div class="form-group">

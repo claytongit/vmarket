@@ -9,7 +9,9 @@ use Yajra\DataTables\Facades\DataTables;
 class SupplierController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the supplier resources.
+     * Retrieves and displays the main suppliers page.
+     * @return \Illuminate\Contracts\View\View Returns the 'supplier.index' view.
      */
     public function index()
     {
@@ -17,7 +19,9 @@ class SupplierController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new supplier resource.
+     * This method currently has no specific logic.
+     * @return void
      */
     public function create()
     {
@@ -25,7 +29,11 @@ class SupplierController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created supplier resource in storage.
+     * Validates the request data, creates a new supplier,
+     * and returns a JSON response indicating success or failure.
+     * @param  \Illuminate\Http\Request  $request Supplier data to be stored.
+     * @return \Illuminate\Http\JsonResponse Returns JSON with status and message.
      */
     public function storeSupplier(Request $request)
     {
@@ -67,7 +75,9 @@ class SupplierController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Retrieve suppliers for DataTables display.
+     * @param  \Illuminate\Http\Request  $request HTTP request.
+     * @return \Yajra\DataTables\Facades\DataTables Returns formatted data for DataTables.
      */
     public function getSuppliers(Request $request)
     {
@@ -95,7 +105,9 @@ class SupplierController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Retrieve a specific supplier for editing.
+     * @param  \Illuminate\Http\Request  $request Request containing the supplier ID.
+     * @return \Illuminate\Http\JsonResponse Returns supplier data in JSON.
      */
     public function getSupplier(Request $request)
     {
@@ -106,7 +118,9 @@ class SupplierController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update data of an existing supplier.
+     * @param  \Illuminate\Http\Request  $request Updated supplier data.
+     * @return \Illuminate\Http\JsonResponse Returns JSON with status and message.
      */
     public function updateSupplier(Request $request)
     {
@@ -149,7 +163,9 @@ class SupplierController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete a specific supplier.
+     * @param  \Illuminate\Http\Request  $request Request containing the supplier ID to be deleted.
+     * @return \Illuminate\Http\JsonResponse Returns JSON with status and message.
      */
     public function deleteSupplier(Request $request)
     {
@@ -162,6 +178,11 @@ class SupplierController extends Controller
         }
     }
 
+    /**
+     * Delete multiple suppliers at once.
+     * @param  \Illuminate\Http\Request  $request Request with IDs of suppliers to be deleted.
+     * @return \Illuminate\Http\JsonResponse Returns JSON with status and message.
+     */
     public function deleteMultipleSupplier(Request $request)
     {
         $ids = $request->checked_ids;
