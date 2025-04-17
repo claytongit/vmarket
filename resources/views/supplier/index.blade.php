@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+@include('parts/header')
     <h1>Supplier</h1>
     <br>
-    <a href="{{ url('/product') }}"><button>Ir para produto</button></a>
-</body>
-</html>
+    <a class="btn btn-block btn-success w-25" href="{{ url('/product') }}">Ir para produto</a>
+@include('parts/footer')
