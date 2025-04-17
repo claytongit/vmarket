@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 17/04/2025 às 03:03
+-- Tempo de geração: 17/04/2025 às 03:43
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -183,10 +183,10 @@ CREATE TABLE `sessions` (
 CREATE TABLE `suppliers` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `nome` varchar(255) NOT NULL,
-  `cnpj` int(11) NOT NULL,
-  `cep` int(11) NOT NULL,
+  `cnpj` varchar(255) NOT NULL,
+  `cep` varchar(255) NOT NULL,
   `endereco` varchar(255) NOT NULL,
-  `numero` int(11) NOT NULL,
+  `numero` varchar(255) NOT NULL,
   `bairro` varchar(255) NOT NULL,
   `cidade` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,

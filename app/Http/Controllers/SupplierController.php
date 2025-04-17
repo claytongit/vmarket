@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Supplier;
 
 class SupplierController extends Controller
 {
@@ -47,7 +48,21 @@ class SupplierController extends Controller
             'cidade.required'=>'Cidade é obrigatório.'
         ]);
 
-        return response()->json(['status' => 1,'message' => 'sucesso']);
+        $supplier = new Supplier();
+        $supplier->cnpj = htmlspecialchars($request->input('cnpj'));
+        $supplier->nome = htmlspecialchars($request->input('nome'));
+        $supplier->cep = htmlspecialchars($request->input('cep'));
+        $supplier->endereco = htmlspecialchars($request->input('endereco'));
+        $supplier->numero = htmlspecialchars($request->input('numero'));
+        $supplier->bairro = htmlspecialchars($request->input('bairro'));
+        $supplier->cidade = htmlspecialchars($request->input('cidade'));
+
+        if ($supplier->save())
+        {
+            return response()->json(['status' => 1,'message' => 'sucesso']);
+        } else {
+            return response()->json(['status' => 0,'message' => 'erro']);
+        }
     }
 
     /**
