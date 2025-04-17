@@ -60,16 +60,16 @@ class SupplierController extends Controller
 
         if ($supplier->save())
         {
-            return response()->json(['status' => 1,'message' => 'sucesso']);
+            return response()->json(['status' => 1,'message' => 'Fornecedor cadastrado com sucesso.']);
         } else {
-            return response()->json(['status' => 0,'message' => 'erro']);
+            return response()->json(['status' => 0,'message' => 'Erro ao cadastrar fornecedor.']);
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function getSupplier(Request $request)
+    public function getSuppliers(Request $request)
     {
         if ($request->ajax())
         {
@@ -97,17 +97,55 @@ class SupplierController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function getSupplier(Request $request)
     {
-        //
+        $supplier_id = $request->id;
+        $supplier = Supplier::findOrFail($supplier_id);
+
+        return response()->json(['data' => $supplier]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updateSupplier(Request $request)
     {
-        //
+        $supplier_id = $request->suppiler_id;
+        $supplier = Supplier::findOrFail($supplier_id);
+
+        $request->validate([
+            'cnpj'=>'required|unique:suppliers,cnpj,'.$supplier->id,
+            'nome'=>'required',
+            'endereco'=>'required',
+            'cep'=>'required',
+            'numero'=>'required',
+            'bairro'=>'required',
+            'cidade'=>'required'
+        ],[
+            'cnpj.required'=>'CNPJ é obrigatório.',
+            'cnpj.unique'=>'CNPJ já existe.',
+            'nome.required'=>'Nome é obrigatório.',
+            'cep.required'=>'CEP é obrigatório.',
+            'endereco.required'=>'Endereço é obrigatório.',
+            'numero.required'=>'Número é obrigatório.',
+            'bairro.required'=>'Bairro é obrigatório.',
+            'cidade.required'=>'Cidade é obrigatório.'
+        ]);
+
+        $supplier->cnpj = htmlspecialchars($request->input('cnpj'));
+        $supplier->nome = htmlspecialchars($request->input('nome'));
+        $supplier->cep = htmlspecialchars($request->input('cep'));
+        $supplier->endereco = htmlspecialchars($request->input('endereco'));
+        $supplier->numero = htmlspecialchars($request->input('numero'));
+        $supplier->bairro = htmlspecialchars($request->input('bairro'));
+        $supplier->cidade = htmlspecialchars($request->input('cidade'));
+
+        if ($supplier->save())
+        {
+            return response()->json(['status' => 1,'message' => 'Atualizado com sucesso.']);
+        } else {
+            return response()->json(['status' => 0,'message' => 'Erro ao atualizar.']);
+        }
     }
 
     /**

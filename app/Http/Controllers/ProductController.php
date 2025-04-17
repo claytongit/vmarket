@@ -54,9 +54,9 @@ class ProductController extends Controller
         {
             $product->suppliers()->sync($request->input('fornecedores'));
 
-            return response()->json(['status' => 1,'message' => 'sucesso']);
+            return response()->json(['status' => 1,'message' => 'Produto cadastrado com sucesso.']);
         } else {
-            return response()->json(['status' => 0,'message' => 'erro']);
+            return response()->json(['status' => 0,'message' => 'Erro ao cadastrar produto.']);
         }
     }
 
@@ -93,17 +93,45 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function getProduct(Request $request)
     {
-        //
+        $product_id = $request->id;
+        $product = Product::findOrFail($product_id);
+
+        return response()->json(['data' => $product]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function updateProduct(Request $request)
     {
-        //
+        $product_id = $request->product_id;
+        $product = Product::findOrFail($product_id);
+
+        $request->validate([
+            'nome'=>'required',
+            'descricao'=>'required',
+            'preco'=>'required',
+            'estoque'=>'required'
+        ],[
+            'nome.required'=>'Nome é obrigatório.',
+            'descricao.required'=>'Descrição é obrigatório.',
+            'preco.required'=>'Preço é obrigatório.',
+            'estoque.required'=>'Estoque é obrigatório.'
+        ]);
+
+        $product->nome = htmlspecialchars($request->input('nome'));
+        $product->descricao = htmlspecialchars($request->input('descricao'));
+        $product->preco = $request->input('preco');
+        $product->estoque = $request->input('estoque');
+
+        if ($product->save())
+        {
+            return response()->json(['status' => 1,'message' => 'Atualizado com sucesso.']);
+        } else {
+            return response()->json(['status' => 0,'message' => 'Erro ao atualizar.']);
+        }
     }
 
     /**
