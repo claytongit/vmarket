@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->integer('cnpj')->unique();
-            $table->integer('cep');
+            $table->string('cnpj')->unique();
+            $table->string('cep');
             $table->string('endereco');
-            $table->integer('numero');
+            $table->string('numero');
             $table->string('bairro');
             $table->string('cidade');
             $table->timestamps();
