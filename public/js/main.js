@@ -62,6 +62,13 @@ $('form#update_suppiler_form').on('submit', function(e){
     requestAjax(form, formdata, supplierTable, modalsuppilerForm);
 });
 
+$(document).on('click','button#deleteSupplierBtn', function(){
+    let id = $(this).data('id');
+
+    requestAjaxDelete('Tem certeza?', 'Você deseja deletar este fornecedor', id, '/delete', supplierTable)
+});
+
+
 function requestAjax(form, formdata, table, modal) {
     $.ajax({
         url:$(form).attr('action'),
@@ -90,6 +97,32 @@ function requestAjax(form, formdata, table, modal) {
             $.each(data.responseJSON.errors, function(prefix, val){
                 $(form).find('span.'+prefix+'_error').text(val[0]);
             });
+        }
+    });
+}
+
+function requestAjaxDelete(title, html, id, url, table) {
+    swal.fire({
+        title: title,
+        html: html,
+        showCancelButton:true,
+        showCloseButton:true,
+        confirmButtonText:'Sim, Deletar',
+        cancelButtonText:'Cancelar',
+        confirmButtonColor:'#556ee6',
+        cancelButtonColor:'#d33',
+        width:300,
+        allowOutsideClick:false
+    }).then(function(result){
+        if( result.value ){
+            $.post(url, {id:id}, function(result){
+                if( result.status == 1 ){
+                    table.ajax.reload(null, false);
+                    toastr.success(result.message);
+                }else{
+                    toastr.error(result.message);
+                }
+            },'json');
         }
     });
 }
@@ -145,7 +178,6 @@ $(document).on('click','button#editSupplierBtn', function(){
        modalsuppilerForm.find('input[name="suppiler_id"]').val(result.data.id);
        modalsuppilerForm.find('input[name="nome"]').val(result.data.nome);
        modalsuppilerForm.find('input[name="cnpj"]').val(result.data.cnpj);
-       modalsuppilerForm.find('input[name="cep"]').val(result.data.cep);
        modalsuppilerForm.find('input[name="endereco"]').val(result.data.endereco);
        modalsuppilerForm.find('input[name="numero"]').val(result.data.numero);
        modalsuppilerForm.find('input[name="bairro"]').val(result.data.bairro);

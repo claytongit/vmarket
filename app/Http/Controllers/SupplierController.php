@@ -151,8 +151,14 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function deleteSupplier(Request $request)
     {
-        //
+        $supplier = Supplier::findOrFail($request->id);
+
+        if($supplier->delete()){
+            return response()->json(['status'=>1,'message'=>'Deletado com sucesso.']);
+        }else{
+            return response()->json(['status'=>0,'message'=>'Erro ao deletar.']);
+        }
     }
 }

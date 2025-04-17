@@ -10,6 +10,7 @@ Route::controller(SupplierController::class)->group(function(){
     Route::get('/get-suppliers', 'getSuppliers')->name('getSuppliers');
     Route::get('/get-supplier', 'getSupplier')->name('getSupplier');
     Route::post('/update', 'updateSupplier')->name('updateSupplier');
+    Route::post('/delete', 'deleteSupplier')->name('deleteSupplier');
 });
 
 Route::controller(ProductController::class)->group(function(){
