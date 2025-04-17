@@ -11,6 +11,7 @@ Route::controller(SupplierController::class)->group(function(){
     Route::get('/get-supplier', 'getSupplier')->name('getSupplier');
     Route::post('/update', 'updateSupplier')->name('updateSupplier');
     Route::post('/delete', 'deleteSupplier')->name('deleteSupplier');
+    Route::post('/delete-multiple','deleteMultipleSupplier')->name('deleteMultipleSupplier');
 });
 
 Route::controller(ProductController::class)->group(function(){

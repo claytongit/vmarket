@@ -161,4 +161,16 @@ class SupplierController extends Controller
             return response()->json(['status'=>0,'message'=>'Erro ao deletar.']);
         }
     }
+
+    public function deleteMultipleSupplier(Request $request)
+    {
+        $ids = $request->checked_ids;
+        $del = Supplier::whereIn('id',$ids)->delete();
+
+        if($del){
+            return response()->json(['status'=>1,'message'=>'Deletados com sucesso.']);
+        }else{
+            return response()->json(['status'=>0,'message'=>'Erro ao deletar.']);
+        } 
+    }
 }

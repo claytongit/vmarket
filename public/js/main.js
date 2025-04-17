@@ -65,92 +65,72 @@ $('form#update_suppiler_form').on('submit', function(e){
 $(document).on('click','button#deleteSupplierBtn', function(){
     let id = $(this).data('id');
 
-    requestAjaxDelete('Tem certeza?', 'Você deseja deletar este fornecedor', id, '/delete', supplierTable)
+    requestAjaxDelete('Tem certeza?', 'Você deseja deletar este fornecedor', id, '/delete', supplierTable, false)
 });
 
 $(document).on('click','button#deleteProductBtn', function(){
     let id = $(this).data('id');
 
-    requestAjaxDelete('Tem certeza?', 'Você deseja deletar este produto', id, '/product/delete', productTable)
+    requestAjaxDelete('Tem certeza?', 'Você deseja deletar este produto', id, '/product/delete', productTable, false)
 });
 
-function requestAjax(form, formdata, table, modal) {
-    $.ajax({
-        url:$(form).attr('action'),
-        method:$(form).attr('method'),
-        data:formdata,
-        processData:false,
-        dataType:'json',
-        contentType:false,
-        beforeSend:function(){
-            $(form).find('span.error-text').text('');
-        },
-        success:function(data){
-            if( data.status == 1 ){
-                toastr.success(data.message);
-                if (modal) {
-                    modal.modal('hide');
-                }else {
-                    $(form)[0].reset();
-                }
-                table.ajax.reload(null, false);
-            }else{
-                toastr.error(data.message);
-            }
-        },
-        error:function(data){
-            $.each(data.responseJSON.errors, function(prefix, val){
-                $(form).find('span.'+prefix+'_error').text(val[0]);
-            });
-        }
-    });
-}
+$(document).on('change','input[type="checkbox"][name="product_checkbox"]', function(){
+    console.log('product_checkbox');
+    if( $('input[type="checkbox"][name="product_checkbox"]').length == $('input[type="checkbox"][name="product_checkbox"]:checked').length ){
+        $('input[type="checkbox"][name="main_checkbox"]').prop('checked',true);
+    }else{
+        $('input[type="checkbox"][name="main_checkbox"]').prop('checked',false);
+    }
+    toggleBtnState('product_checkbox', 'multipleDeleteProductBtn');
+});
 
-function requestAjaxDelete(title, html, id, url, table) {
-    swal.fire({
-        title: title,
-        html: html,
-        showCancelButton:true,
-        showCloseButton:true,
-        confirmButtonText:'Sim, Deletar',
-        cancelButtonText:'Cancelar',
-        confirmButtonColor:'#556ee6',
-        cancelButtonColor:'#d33',
-        width:300,
-        allowOutsideClick:false
-    }).then(function(result){
-        if( result.value ){
-            $.post(url, {id:id}, function(result){
-                if( result.status == 1 ){
-                    table.ajax.reload(null, false);
-                    toastr.success(result.message);
-                }else{
-                    toastr.error(result.message);
-                }
-            },'json');
-        }
+$(document).on('click','button#multipleDeleteProductBtn', function(){
+    let selectedCheckeds = [];
+    $('input[type="checkbox"][name="product_checkbox"]:checked').each(function(){
+        selectedCheckeds.push($(this).data('id'));
     });
-}
 
-function initDataTable({ selector, ajaxUrl, columns, checkboxName }) {
-    if (!$(selector).length) return;
+    if( selectedCheckeds.length > 0 ){
+        requestAjaxDelete(
+            'Tem certeza?', 
+            'Você deseja excluir os ' + selectedCheckeds.length + ' produtos selecionados?', 
+            selectedCheckeds, 
+            '/product/delete-multiple',
+            productTable,
+            true
+        );
+        $('button#multipleDeleteProductBtn').addClass('d-none');
+    }
+});
 
-    return $(selector).DataTable({
-        processing: true,
-        info: true,
-        serverSide: true,
-        responsive: true,
-        autoWidth: false,
-        pageLength: 10,
-        aLengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, 'All']],
-        ajax: ajaxUrl,
-        columns: columns
-    }).on('draw', function () {
-        $(`input[type="checkbox"][name="${checkboxName}"]`).prop('checked', false);
-        $('input[type="checkbox"][name="main_checkbox"]').prop('checked', false);
-        $('button#multipleDeleteBtn').text('Delete').addClass('d-none');
+$(document).on('change','input[type="checkbox"][name="supplier_checkbox"]', function(){
+    console.log('supplier_checkbox');
+    if( $('input[type="checkbox"][name="supplier_checkbox"]').length == $('input[type="checkbox"][name="supplier_checkbox"]:checked').length ){
+        $('input[type="checkbox"][name="main_checkbox"]').prop('checked',true);
+    }else{
+        $('input[type="checkbox"][name="main_checkbox"]').prop('checked',false);
+    }
+    toggleBtnState('supplier_checkbox', 'multipleDeleteProductBtn');
+});
+
+$(document).on('click','button#multipleDeleteSupplierBtn', function(){
+    let selectedCheckeds = [];
+    $('input[type="checkbox"][name="supplier_checkbox"]:checked').each(function(){
+        selectedCheckeds.push($(this).data('id'));
     });
-}
+
+    if( selectedCheckeds.length > 0 ){
+        requestAjaxDelete(
+            'Tem certeza?', 
+            'Você deseja excluir os ' + selectedCheckeds.length + ' fornecedores selecionados?', 
+            selectedCheckeds, 
+            '/delete-multiple',
+            supplierTable,
+            true
+        );
+        $('button#multipleDeleteSupplierBtn').addClass('d-none');
+    }
+});
 
 let modalProductForm = $('#modal-form-product');
 
@@ -191,3 +171,124 @@ $(document).on('click','button#editSupplierBtn', function(){
        modalsuppilerForm.modal('show');
     },'json');
 });
+
+$(document).on('click', 'input[type="checkbox"][name="main_checkbox"]', function(){
+    console.log('main_checkbox');
+    
+    if($('input[type="checkbox"][name="product_checkbox"]')) {
+        if( this.checked ){
+            $('input[type="checkbox"][name="product_checkbox"]').each(function(){
+                this.checked = true;
+            });
+        }else{
+            $('input[type="checkbox"][name="product_checkbox"]').each(function(){
+                this.checked = false;
+            });
+        }
+
+        toggleBtnState('product_checkbox', 'multipleDeleteProductBtn');
+    }
+    
+    if($('input[type="checkbox"][name="supplier_checkbox"]')) {
+        if( this.checked ){
+            $('input[type="checkbox"][name="supplier_checkbox"]').each(function(){
+                this.checked = true;
+            });
+        }else{
+            $('input[type="checkbox"][name="supplier_checkbox"]').each(function(){
+                this.checked = false;
+            });
+        }
+
+        toggleBtnState('supplier_checkbox', 'multipleDeleteSupplierBtn');
+    }
+});
+
+function requestAjax(form, formdata, table, modal) {
+    $.ajax({
+        url:$(form).attr('action'),
+        method:$(form).attr('method'),
+        data:formdata,
+        processData:false,
+        dataType:'json',
+        contentType:false,
+        beforeSend:function(){
+            $(form).find('span.error-text').text('');
+        },
+        success:function(data){
+            if( data.status == 1 ){
+                toastr.success(data.message);
+                if (modal) {
+                    modal.modal('hide');
+                }else {
+                    $(form)[0].reset();
+                }
+                table.ajax.reload(null, false);
+            }else{
+                toastr.error(data.message);
+            }
+        },
+        error:function(data){
+            $.each(data.responseJSON.errors, function(prefix, val){
+                $(form).find('span.'+prefix+'_error').text(val[0]);
+            });
+        }
+    });
+}
+
+function requestAjaxDelete(title, html, ids, url, table, multiple) {
+    swal.fire({
+        title: title,
+        html: html,
+        showCancelButton:true,
+        showCloseButton:true,
+        confirmButtonText:'Sim, Deletar',
+        cancelButtonText:'Cancelar',
+        confirmButtonColor:'#556ee6',
+        cancelButtonColor:'#d33',
+        width:300,
+        allowOutsideClick:false
+    }).then(function(result){
+        if( result.value ){
+            var data = multiple ? {checked_ids:ids} : {id:ids};
+            $.post(url, data, function(result){
+                if( result.status == 1 ){
+                    table.ajax.reload(null, false);
+                    toastr.success(result.message);
+                }else{
+                    toastr.error(result.message);
+                }
+            },'json');
+        }
+    });
+}
+
+function initDataTable({ selector, ajaxUrl, columns, checkboxName }) {
+    if (!$(selector).length) return;
+
+    return $(selector).DataTable({
+        processing: true,
+        info: true,
+        serverSide: true,
+        responsive: true,
+        autoWidth: false,
+        pageLength: 10,
+        aLengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, 'All']],
+        ajax: ajaxUrl,
+        columns: columns
+    }).on('draw', function () {
+        $(`input[type="checkbox"][name="${checkboxName}"]`).prop('checked', false);
+        $('input[type="checkbox"][name="main_checkbox"]').prop('checked', false);
+        $('button#multipleDeleteBtn').text('Delete').addClass('d-none');
+    });
+}
+
+function toggleBtnState(name_checkbox, name_button){
+    let selectedItems = $('input[type="checkbox"][name="' + name_checkbox + '"]:checked').length;
+
+    if( selectedItems > 1 ){
+        $('button#' + name_button).text('Delete ('+selectedItems+')').removeClass('d-none');
+    }else{
+        $('button#' + name_button).addClass('d-none');
+    }
+}
