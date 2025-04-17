@@ -25,9 +25,22 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeProduct(Request $request)
     {
         //
+        $request->validate([
+            'nome'=>'required',
+            'descricao'=>'required',
+            'preco'=>'required',
+            'estoque'=>'required'
+        ],[
+            'nome.required'=>'Nome é obrigatório.',
+            'descricao.required'=>'Descrição é obrigatório.',
+            'preco.required'=>'Preço é obrigatório.',
+            'estoque.required'=>'Estoque é obrigatório.'
+        ]);
+
+        return response()->json(['status' => 1,'all' => $request->all()]);
     }
 
     /**

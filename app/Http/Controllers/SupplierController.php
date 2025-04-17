@@ -25,9 +25,29 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function storeSupplier(Request $request)
     {
         //
+        $request->validate([
+            'cnpj'=>'required|unique:suppliers,cnpj',
+            'nome'=>'required',
+            'cep'=>'required',
+            'endereco'=>'required',
+            'numero'=>'required',
+            'bairro'=>'required',
+            'cidade'=>'required'
+        ],[
+            'cnpj.required'=>'CNPJ é obrigatório.',
+            'cnpj.unique'=>'CNPJ já existe.',
+            'nome.required'=>'Nome é obrigatório.',
+            'cep.required'=>'CEP é obrigatório.',
+            'endereco.required'=>'Endereço é obrigatório.',
+            'numero.required'=>'Número é obrigatório.',
+            'bairro.required'=>'Bairro é obrigatório.',
+            'cidade.required'=>'Cidade é obrigatório.'
+        ]);
+
+        return response()->json(['status' => 1,'message' => 'sucesso']);
     }
 
     /**
