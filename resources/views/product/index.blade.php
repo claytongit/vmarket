@@ -22,7 +22,7 @@
                                 <th>Estoque</th>
                                 <th>Fornecedores</th>
                                 <th class="text-right">
-                                    <button class="btn btn-sm btn-danger d-none" id="multipleDeleteBtn">Delete</button>
+                                    <button class="btn btn-sm btn-danger d-none" id="multipleDeleteProductBtn">Delete</button>
                                 </th>
                                </thead>
                             </table>

@@ -147,4 +147,16 @@ class ProductController extends Controller
             return response()->json(['status'=>0,'message'=>'Erro ao deletar.']);
         }
     }
+
+    public function deleteMultipleProduct(Request $request)
+    {
+        $ids = $request->checked_ids;
+        $del = Product::whereIn('id',$ids)->delete();
+
+        if($del){
+            return response()->json(['status'=>1,'message'=>'Deletados com sucesso.']);
+        }else{
+            return response()->json(['status'=>0,'message'=>'Erro ao deletar.']);
+        }
+    }
 }
