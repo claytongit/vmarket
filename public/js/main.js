@@ -54,6 +54,14 @@ $('form#update_product_form').on('submit', function(e){
     requestAjax(form, formdata, productTable, modalProductForm);
 });
 
+$('form#update_suppiler_form').on('submit', function(e){
+    e.preventDefault();
+
+    let form = this;
+    let formdata = new FormData(form);
+    requestAjax(form, formdata, supplierTable, modalsuppilerForm);
+});
+
 function requestAjax(form, formdata, table, modal) {
     $.ajax({
         url:$(form).attr('action'),
@@ -122,5 +130,27 @@ $(document).on('click','button#editProductBtn', function(){
        modalProductForm.find('input[name="descricao"]').val(result.data.descricao);
        
        modalProductForm.modal('show');
+    },'json');
+});
+
+let modalsuppilerForm = $('#modal-form-suppiler');
+
+$(document).on('click','button#editSupplierBtn', function(){
+    let id = $(this).data('id');
+    let url = "/get-supplier";
+    modalsuppilerForm.find('form')[0].reset();
+    modalsuppilerForm.find('span.error-text').text('');
+
+    $.get(url, {id:id}, function(result){
+       modalsuppilerForm.find('input[name="suppiler_id"]').val(result.data.id);
+       modalsuppilerForm.find('input[name="nome"]').val(result.data.nome);
+       modalsuppilerForm.find('input[name="cnpj"]').val(result.data.cnpj);
+       modalsuppilerForm.find('input[name="cep"]').val(result.data.cep);
+       modalsuppilerForm.find('input[name="endereco"]').val(result.data.endereco);
+       modalsuppilerForm.find('input[name="numero"]').val(result.data.numero);
+       modalsuppilerForm.find('input[name="bairro"]').val(result.data.bairro);
+       modalsuppilerForm.find('input[name="cidade"]').val(result.data.cidade);
+       
+       modalsuppilerForm.modal('show');
     },'json');
 });

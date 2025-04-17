@@ -80,4 +80,5 @@
              </div>
         </div>
     </div>
+    @include('supplier/modal-form')
 @include('parts/footer')

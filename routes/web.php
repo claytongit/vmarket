@@ -7,7 +7,9 @@ use App\Http\Controllers\SupplierController;
 Route::controller(SupplierController::class)->group(function(){
     Route::get('/', 'index')->name('index');
     Route::post('/store', 'storeSupplier')->name('store');
-    Route::get('/get-suppliers', 'getSupplier')->name('getSupplier');
+    Route::get('/get-suppliers', 'getSuppliers')->name('getSuppliers');
+    Route::get('/get-supplier', 'getSupplier')->name('getSupplier');
+    Route::post('/update', 'updateSupplier')->name('updateSupplier');
 });
 
 Route::controller(ProductController::class)->group(function(){
