@@ -14,13 +14,14 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover table-condensed table-sm" id="countries">
+                            <table class="table table-hover table-condensed table-sm" id="products">
                                <thead>
                                 <th><input type="checkbox" name="main_checkbox"></th>
                                 <th>Nome</th>
                                 <th>Descrição</th>
                                 <th>Preço</th>
                                 <th>Estoque</th>
+                                <th>Fornecedores</th>
                                 <th class="text-right">
                                     <button class="btn btn-sm btn-danger d-none" id="multipleDeleteBtn">Delete</button>
                                 </th>
