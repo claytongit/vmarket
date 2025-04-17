@@ -68,6 +68,11 @@ $(document).on('click','button#deleteSupplierBtn', function(){
     requestAjaxDelete('Tem certeza?', 'Você deseja deletar este fornecedor', id, '/delete', supplierTable)
 });
 
+$(document).on('click','button#deleteProductBtn', function(){
+    let id = $(this).data('id');
+
+    requestAjaxDelete('Tem certeza?', 'Você deseja deletar este produto', id, '/product/delete', productTable)
+});
 
 function requestAjax(form, formdata, table, modal) {
     $.ajax({
