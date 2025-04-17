@@ -1,5 +1,25 @@
 let supplierTable, productTable;
 
+$(document).ready(function(){
+    $('#cnpj').mask('00.000.000/0000-00');
+    $('#cep').mask('00000-000',{
+        onComplete: function(cep) {
+            $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(data) {
+                if (!("erro" in data)) {
+                    $("#endereco").val(data.logradouro);
+                    $("#bairro").val(data.bairro);
+                    $("#cidade").val(data.localidade);
+                    $('#numero').focus();
+                } else {
+                    $("#endereco").val("");
+                    $("#bairro").val("");
+                    $("#cidade").val("");
+                }
+            });
+        }
+    });
+});
+
 if (!$.fn.DataTable.isDataTable('table#supplier')) {
     supplierTable = initDataTable({
         selector: 'table#supplier',
