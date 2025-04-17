@@ -18,7 +18,6 @@
                                <thead>
                                 <th><input type="checkbox" name="main_checkbox"></th>
                                 <th>Nome</th>
-                                <th>Descrição</th>
                                 <th>Preço</th>
                                 <th>Estoque</th>
                                 <th>Fornecedores</th>
@@ -76,4 +75,5 @@
              </div>
         </div>
     </div>
+    @include('product/modal-form')
 @include('parts/footer')
