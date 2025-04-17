@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Supplier;
 
 class ProductController extends Controller
 {
@@ -11,7 +13,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('product.index');
+        $suppliers = Supplier::all();
+        return view('product.index', compact('suppliers'));
     }
 
     /**
@@ -40,7 +43,22 @@ class ProductController extends Controller
             'estoque.required'=>'Estoque é obrigatório.'
         ]);
 
-        return response()->json(['status' => 1,'all' => $request->all()]);
+        $product = new Product();
+        $product->nome = htmlspecialchars($request->input('nome'));
+        $product->descricao = htmlspecialchars($request->input('descricao'));
+        $product->preco = $request->input('preco');
+        $product->estoque = $request->input('estoque');
+
+        if ($request->has('suppliers')) {
+            $product->suppliers()->sync($request->input('suppliers'));
+        }
+
+        if ($product->save())
+        {
+            return response()->json(['status' => 1,'message' => 'sucesso']);
+        } else {
+            return response()->json(['status' => 0,'message' => 'erro']);
+        }
     }
 
     /**

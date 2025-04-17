@@ -12,9 +12,8 @@ $('form#form-product').on('submit', function(e){
 
     let form = this;
     let formdata = new FormData(form);
-    requestAjax(form, formdata)
-
-    console.log("Formulario do product!");
+    
+    requestAjax(form, formdata);
 });
 
 function requestAjax(form, formdata) {

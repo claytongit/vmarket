@@ -61,9 +61,9 @@
                             <div class="form-group">
                                 <label for="fornecedores">Fornecedores</label>
                                 <select id="fornecedores" class="form-control"name="fornecedores[]" multiple size="2" >
-                                    <option value="fornecedor1" selected>Fornecedor 1</option>
-                                    <option value="fornecedor2">Fornecedor 2</option>
-                                    <option value="fornecedor3">Fornecedor 3</option>
+                                    @foreach($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}">{{ $supplier->nome }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
