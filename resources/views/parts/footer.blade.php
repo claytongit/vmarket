@@ -4,6 +4,7 @@
     <script src="{{ asset('datatables/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('js/functions.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script>
         $.ajaxSetup({

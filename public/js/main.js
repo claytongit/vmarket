@@ -75,7 +75,6 @@ $(document).on('click','button#deleteProductBtn', function(){
 });
 
 $(document).on('change','input[type="checkbox"][name="product_checkbox"]', function(){
-    console.log('product_checkbox');
     if( $('input[type="checkbox"][name="product_checkbox"]').length == $('input[type="checkbox"][name="product_checkbox"]:checked').length ){
         $('input[type="checkbox"][name="main_checkbox"]').prop('checked',true);
     }else{
@@ -104,7 +103,6 @@ $(document).on('click','button#multipleDeleteProductBtn', function(){
 });
 
 $(document).on('change','input[type="checkbox"][name="supplier_checkbox"]', function(){
-    console.log('supplier_checkbox');
     if( $('input[type="checkbox"][name="supplier_checkbox"]').length == $('input[type="checkbox"][name="supplier_checkbox"]:checked').length ){
         $('input[type="checkbox"][name="main_checkbox"]').prop('checked',true);
     }else{
@@ -145,7 +143,7 @@ $(document).on('click','button#editProductBtn', function(){
        modalProductForm.find('input[name="nome"]').val(result.data.nome);
        modalProductForm.find('input[name="preco"]').val(result.data.preco);
        modalProductForm.find('textarea[name="descricao"]').val(result.data.descricao);
-       modalProductForm.find('input[name="descricao"]').val(result.data.descricao);
+       modalProductForm.find('input[name="estoque"]').val(result.data.estoque);
        
        modalProductForm.modal('show');
     },'json');
@@ -163,6 +161,7 @@ $(document).on('click','button#editSupplierBtn', function(){
        modalsuppilerForm.find('input[name="suppiler_id"]').val(result.data.id);
        modalsuppilerForm.find('input[name="nome"]').val(result.data.nome);
        modalsuppilerForm.find('input[name="cnpj"]').val(result.data.cnpj);
+       modalsuppilerForm.find('input[name="cep"]').val(result.data.cep);
        modalsuppilerForm.find('input[name="endereco"]').val(result.data.endereco);
        modalsuppilerForm.find('input[name="numero"]').val(result.data.numero);
        modalsuppilerForm.find('input[name="bairro"]').val(result.data.bairro);
@@ -172,9 +171,7 @@ $(document).on('click','button#editSupplierBtn', function(){
     },'json');
 });
 
-$(document).on('click', 'input[type="checkbox"][name="main_checkbox"]', function(){
-    console.log('main_checkbox');
-    
+$(document).on('click', 'input[type="checkbox"][name="main_checkbox"]', function(){    
     if($('input[type="checkbox"][name="product_checkbox"]')) {
         if( this.checked ){
             $('input[type="checkbox"][name="product_checkbox"]').each(function(){
@@ -203,92 +200,3 @@ $(document).on('click', 'input[type="checkbox"][name="main_checkbox"]', function
         toggleBtnState('supplier_checkbox', 'multipleDeleteSupplierBtn');
     }
 });
-
-function requestAjax(form, formdata, table, modal) {
-    $.ajax({
-        url:$(form).attr('action'),
-        method:$(form).attr('method'),
-        data:formdata,
-        processData:false,
-        dataType:'json',
-        contentType:false,
-        beforeSend:function(){
-            $(form).find('span.error-text').text('');
-        },
-        success:function(data){
-            if( data.status == 1 ){
-                toastr.success(data.message);
-                if (modal) {
-                    modal.modal('hide');
-                }else {
-                    $(form)[0].reset();
-                }
-                table.ajax.reload(null, false);
-            }else{
-                toastr.error(data.message);
-            }
-        },
-        error:function(data){
-            $.each(data.responseJSON.errors, function(prefix, val){
-                $(form).find('span.'+prefix+'_error').text(val[0]);
-            });
-        }
-    });
-}
-
-function requestAjaxDelete(title, html, ids, url, table, multiple) {
-    swal.fire({
-        title: title,
-        html: html,
-        showCancelButton:true,
-        showCloseButton:true,
-        confirmButtonText:'Sim, Deletar',
-        cancelButtonText:'Cancelar',
-        confirmButtonColor:'#556ee6',
-        cancelButtonColor:'#d33',
-        width:300,
-        allowOutsideClick:false
-    }).then(function(result){
-        if( result.value ){
-            var data = multiple ? {checked_ids:ids} : {id:ids};
-            $.post(url, data, function(result){
-                if( result.status == 1 ){
-                    table.ajax.reload(null, false);
-                    toastr.success(result.message);
-                }else{
-                    toastr.error(result.message);
-                }
-            },'json');
-        }
-    });
-}
-
-function initDataTable({ selector, ajaxUrl, columns, checkboxName }) {
-    if (!$(selector).length) return;
-
-    return $(selector).DataTable({
-        processing: true,
-        info: true,
-        serverSide: true,
-        responsive: true,
-        autoWidth: false,
-        pageLength: 10,
-        aLengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, 'All']],
-        ajax: ajaxUrl,
-        columns: columns
-    }).on('draw', function () {
-        $(`input[type="checkbox"][name="${checkboxName}"]`).prop('checked', false);
-        $('input[type="checkbox"][name="main_checkbox"]').prop('checked', false);
-        $('button#multipleDeleteBtn').text('Delete').addClass('d-none');
-    });
-}
-
-function toggleBtnState(name_checkbox, name_button){
-    let selectedItems = $('input[type="checkbox"][name="' + name_checkbox + '"]:checked').length;
-
-    if( selectedItems > 1 ){
-        $('button#' + name_button).text('Delete ('+selectedItems+')').removeClass('d-none');
-    }else{
-        $('button#' + name_button).addClass('d-none');
-    }
-}
