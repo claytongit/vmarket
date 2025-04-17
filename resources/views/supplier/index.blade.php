@@ -14,7 +14,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover table-condensed table-sm" id="countries">
+                            <table class="table table-hover table-condensed table-sm" id="supplier">
                                <thead>
                                 <th><input type="checkbox" name="main_checkbox"></th>
                                 <th>Nome</th>

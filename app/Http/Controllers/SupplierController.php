@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Supplier;
+use Yajra\DataTables\Facades\DataTables;
 
 class SupplierController extends Controller
 {
@@ -68,9 +69,29 @@ class SupplierController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function getSupplier(Request $request)
     {
-        //
+        if ($request->ajax())
+        {
+            $data = Supplier::select(['id', 'nome', 'cnpj']);
+
+            return DataTables::of($data)->addColumn(
+                'actions', function($row)
+                {
+                    return '<div class="btn-group">
+                                <button class="btn btn-sm btn-primary" data-id="' . $row['id'] . '" id="editSupplierBtn">Update</button>
+                                <button class="btn btn-sm btn-danger" data-id="' . $row['id'] . '" id="deleteSupplierBtn">Delete</button>
+                            </div>';
+                }
+            )->addColumn(
+                'checkbox', function($row)
+                {
+                    return '<input type="checkbox" name="supplier_checkbox" data-id="' . $row['id'] . '">';
+                }
+            )->rawColumns(
+                ['actions', 'checkbox']
+            )->make(true);
+        }
     }
 
     /**
