@@ -11,4 +11,5 @@ Route::controller(SupplierController::class)->group(function(){
 
 Route::controller(ProductController::class)->group(function(){
     Route::get('/product', 'index')->name('index');
+    Route::post('/product/store', 'storeProduct')->name('product.store');
 });

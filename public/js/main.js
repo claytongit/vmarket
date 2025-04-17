@@ -8,6 +8,16 @@ $('form#form-supplier').on('submit', function(e){
     console.log("Formulario do supplier!");
 });
 
+$('form#form-product').on('submit', function(e){
+    e.preventDefault();
+
+    let form = this;
+    let formdata = new FormData(form);
+    requestAjax(form, formdata)
+
+    console.log("Formulario do product!");
+});
+
 function requestAjax(form, formdata) {
     $.ajax({
         url:$(form).attr('action'),
