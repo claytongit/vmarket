@@ -11,6 +11,7 @@ Route::controller(SupplierController::class)->group(function(){
     Route::get('/get-supplier', 'getSupplier')->name('getSupplier');
     Route::post('/update', 'updateSupplier')->name('updateSupplier');
     Route::post('/delete', 'deleteSupplier')->name('deleteSupplier');
+    Route::post('/delete-multiple','deleteMultipleSupplier')->name('deleteMultipleSupplier');
 });
 
 Route::controller(ProductController::class)->group(function(){
@@ -20,4 +21,5 @@ Route::controller(ProductController::class)->group(function(){
     Route::get('/product/get-product', 'getProduct')->name('product.getProduct');
     Route::post('/product/update','updateProduct')->name('product.updateProduct');
     Route::post('/product/delete','deleteProduct')->name('product.delete');
+    Route::post('/product/delete-multiple','deleteMultipleProduct')->name('product.deleteMultipleProduct');
 });
